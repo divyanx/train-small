@@ -1,0 +1,28 @@
+# litellm-config.yaml
+
+# 1. Model List: Define all the models the proxy will serve.
+model_list:
+  - model_name: gpt-4o-mini  # This is the alias your app will use
+    litellm_params:
+      model: gpt-4o-mini     # The actual provider model name
+      api_key: "os.environ/OPENAI_API_KEY" # Tells LiteLLM to get the key from this environment variable
+
+  - model_name: gemini-2.5-flash
+    litellm_params:
+      model: gemini-2.5-flash
+      api_key: "os.environ/GOOGLE_API_KEY"
+
+  - model_name: local-llama3 # Alias for our local model
+    litellm_params:
+      model: ollama/llama3   # The 'ollama/' prefix directs the request to Ollama
+      api_base: http://localhost:11434 # The default Ollama server address
+
+  - model_name: local-qwen3:0.6b # Alias for our local model
+    litellm_params:
+      model: ollama/qwen3:0.6b  # The 'ollama/' prefix directs the request to Ollama
+      api_base: http://localhost:11434 # The default Ollama server address
+
+# 2. General Settings for the proxy
+litellm_settings:
+  drop_params: true # Recommended: drops non-standard parameters from requests
+  set_verbose: true # Good for debugging
