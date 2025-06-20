@@ -7,6 +7,16 @@ model_list:
       model: gpt-4o-mini     # The actual provider model name
       api_key: "os.environ/OPENAI_API_KEY" # Tells LiteLLM to get the key from this environment variable
 
+  - model_name: gpt-4o  # This is the alias your app will use
+    litellm_params:
+      model: gpt-4o    # The actual provider model name
+      api_key: "os.environ/OPENAI_API_KEY" # Tells LiteLLM to get the key from this environment variable
+
+  - model_name: gpt-4.1-nano  # This is the alias your app will use
+    litellm_params:
+      model: gpt-4.1-nano    # The actual provider model name
+      api_key: "os.environ/OPENAI_API_KEY" # Tells LiteLLM to get the key from this environment variable
+
   - model_name: gemini-2.5-flash
     litellm_params:
       model: gemini-2.5-flash
@@ -22,6 +32,10 @@ model_list:
       model: ollama/qwen3:0.6b  # The 'ollama/' prefix directs the request to Ollama
       api_base: http://localhost:11434 # The default Ollama server address
 
+  - model_name: local-qwen3:32b # Alias for our local model
+    litellm_params:
+      model: ollama/qwen3:32b  # The 'ollama/' prefix directs the request to Ollama
+      api_base: http://localhost:11434 # The default Ollama server address
 # 2. General Settings for the proxy
 litellm_settings:
   drop_params: true # Recommended: drops non-standard parameters from requests
