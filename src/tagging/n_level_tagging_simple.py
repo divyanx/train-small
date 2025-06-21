@@ -10,22 +10,15 @@ You are an expert intent-tagger. You will be given a document and a fixed list o
 
 TASK:
 1. Read the document carefully.
-2. For each of your top (at max 3) choices, provide:
+2. Select the best choice among them and provide
    • label
-   • confidence
    • a few sentence rationale **specific to that label only** clearly justifying the choice.
 3. If none of the options fit then only, Give “None” with a rationale. 
 FORMAT:
 ```json
 {
-  "candidates": [
-    {
-      "rationale": "…why Category1 matches this abstract…",
-      "confidence": 0.72,
-      "label":   "<Category1>",
-    }
-    ...
-  ]
+  "rationale": "…why Selected Category matches this abstract…",
+  "label":   "<Category>"
 }
 ```"""
 
@@ -69,28 +62,25 @@ async def tag_n_level(
           - candidates: list of {label, confidence, rationale}
           - children: nested dict for the chosen label's subtree (always present, empty if leaf)
     """
-    async def _tag_options(options: list[TaxonomyNode]) -> list[dict]:
+    async def _tag_options(options: list[TaxonomyNode]) -> dict:
         final, _ = await choose_intents(document, options, model)
-        return final.get("candidates", [])
+        return final
 
     async def _recurse(options: list[TaxonomyNode]) -> dict:
-        candidates = await _tag_options(options)
-        if not options or not candidates:
+        choice = await _tag_options(options)
+        if not options or not choice:
             return {}
 
-        top_label = candidates[0]["label"]
-        top_rationale = candidates[0]["rationale"]
-        top_confidence = candidates[0]["confidence"]
+        label = choice["label"]
+        rationale = choice["rationale"]
         result = {
-            "prediction": top_label,
-            "rationale": top_rationale,
-            "confidence": top_confidence,
-            "candidates": candidates,
+            "prediction": label,
+            "rationale": rationale,
             "children": {}
         }
 
         # descend into the chosen child's subtree if available
-        chosen_node = next((opt for opt in options if opt.name == top_label), None)
+        chosen_node = next((opt for opt in options if opt.name == label), None)
         if chosen_node and chosen_node.children:
             result["children"] = await _recurse(
                 list(chosen_node.children.values())

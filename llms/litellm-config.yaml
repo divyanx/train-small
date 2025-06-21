@@ -36,6 +36,11 @@ model_list:
     litellm_params:
       model: ollama/qwen3:32b  # The 'ollama/' prefix directs the request to Ollama
       api_base: http://localhost:11434 # The default Ollama server address
+
+  - model_name: conversation-insights-quantized # Alias for our local model
+    litellm_params:
+      model: hosted_vllm/conversation-insights-quantized
+      api_base: http://localhost:4001 # The default Ollama server address
 # 2. General Settings for the proxy
 litellm_settings:
   drop_params: true # Recommended: drops non-standard parameters from requests

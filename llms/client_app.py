@@ -100,7 +100,7 @@ async def main():
     await asyncio.gather(
         # ask_model(model="gpt-4o-mini", prompt=user_prompt),
         # ask_model(model="gemini-2.5-flash", prompt=user_prompt), # Corrected your model name
-        ask_model(model="local-qwen3:0.6b", prompt=user_prompt)
+        ask_model(model="conversation-insights-quantized", prompt=user_prompt)
     )
 
 
